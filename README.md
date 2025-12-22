@@ -10,7 +10,7 @@ The project demonstrates extraction, transformation, and loading of data into a 
 
 ## Contents
 - `Source_Data/` – Visual Studio project files and SSIS packages
-- `Documentation/` – Detailed project documentation (PDF version)
+
 
 
 ## Project Overview
