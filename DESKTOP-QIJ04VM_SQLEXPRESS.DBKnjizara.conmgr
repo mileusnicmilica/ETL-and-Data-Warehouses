@@ -1,0 +1,12 @@
+﻿<?xml version="1.0"?>
+<DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:ObjectName="DESKTOP-QIJ04VM_SQLEXPRESS.DBKnjizara"
+  DTS:DTSID="{87DD0B90-800A-452B-8138-367FEC8683E1}"
+  DTS:CreationName="OLEDB">
+  <DTS:ObjectData>
+    <DTS:ConnectionManager
+      DTS:ConnectRetryCount="1"
+      DTS:ConnectRetryInterval="5"
+      DTS:ConnectionString="Data Source=DESKTOP-QIJ04VM\SQLEXPRESS;Initial Catalog=DBKnjizara;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-ETL-Knjizara-{87DD0B90-800A-452B-8138-367FEC8683E1}DESKTOP-QIJ04VM\SQLEXPRESS.DBKnjizara;Auto Translate=False;" />
+  </DTS:ObjectData>
+</DTS:ConnectionManager>

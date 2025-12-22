@@ -1,0 +1,1439 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="8/17/2025 4:27:27 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DESKTOP-QIJ04VM"
+  DTS:CreatorName="DESKTOP-QIJ04VM\Milica"
+  DTS:DTSID="{ADE1F07D-8F88-401B-8B5D-391CCD07BABF}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.5685.2"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="DimProduct"
+  DTS:PackageType="5"
+  DTS:VersionBuild="11"
+  DTS:VersionGUID="{0936F011-1F6E-4101-82F5-0BFCB98D6BE6}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:LogProviders>
+    <DTS:LogProvider
+      DTS:ConfigString="DESKTOP-QIJ04VM_SQLEXPRESS.DWKnjizara"
+      DTS:CreationName="Microsoft.LogProviderSQLServer"
+      DTS:Description="Writes log entries for events to a SQL Server database"
+      DTS:DTSID="{8DFDF9E8-A3D5-41B4-AAF6-A982EF177ED8}"
+      DTS:ObjectName="SSIS log provider for SQL Server">
+      <DTS:ObjectData>
+        <InnerObject />
+      </DTS:ObjectData>
+    </DTS:LogProvider>
+  </DTS:LogProviders>
+  <DTS:Variables />
+  <DTS:LoggingOptions
+    DTS:FilterKind="0"
+    DTS:LoggingMode="1">
+    <DTS:SelectedLogProviders>
+      <DTS:SelectedLogProvider
+        DTS:InstanceID="{8DFDF9E8-A3D5-41B4-AAF6-A982EF177ED8}" />
+    </DTS:SelectedLogProviders>
+  </DTS:LoggingOptions>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\DROP and CREATE DimProduct"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{D45C340D-9CE6-47A3-830E-CF52611F3474}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="DROP and CREATE DimProduct"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:LoggingOptions
+        DTS:FilterKind="0" />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{7304F227-A2CA-4579-A9D1-73777907F74D}"
+          SQLTask:SqlStatementSource="IF EXISTS&#xA;&#x9;(SELECT *&#xA;&#x9;FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS&#xA;&#x9;WHERE CONSTRAINT_NAME = 'FK_FactSales_DimProduct')&#xA;&#xA;BEGIN&#xA;&#x9;ALTER TABLE [dbo].[FactSales] DROP CONSTRAINT [FK_FactSales_DimProduct]&#xA;END&#xA;&#xA;IF EXISTS&#xA;&#x9;(SELECT *&#xA;&#x9;FROM sysobjects&#xA;&#x9;WHERE id = OBJECT_ID(N'DimProduct'))&#xA;BEGIN&#xA;&#x9;DROP TABLE [dbo].[DimProduct]&#xA;&#xA;&#x9;CREATE TABLE [dbo].[DimProduct](&#xA;&#x9;[product_sid] [int] IDENTITY(1,1) NOT NULL,&#xA;&#x9;[product_id] [int] NOT NULL,&#xA;&#x9;[product_name] [nvarchar](50) NOT NULL,&#xA;&#x9;[product_subcategory] [nvarchar](50) NOT NULL,&#xA;&#x9;[product_category] [nvarchar](50) NOT NULL,&#xA; CONSTRAINT [PK_DimProduct] PRIMARY KEY CLUSTERED &#xA;(&#xA;&#x9;[product_sid] ASC&#xA;)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]&#xA;) ON [PRIMARY]&#xA;END" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\ETL DimProduct"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{F7494B99-3CDB-4FDA-8115-9F781356FF3C}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="ETL DimProduct"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:LoggingOptions
+        DTS:FilterKind="0" />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\ETL DimProduct\Load DimProduct"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="Load DimProduct"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[DimProduct]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\ETL DimProduct\Load DimProduct.Connections[OleDbConnection]"
+                  connectionManagerID="{7304F227-A2CA-4579-A9D1-73777907F74D}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[DESKTOP-QIJ04VM_SQLEXPRESS.DWKnjizara]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\ETL DimProduct\Load DimProduct.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\ETL DimProduct\Load DimProduct.Inputs[OLE DB Destination Input].Columns[product_id]"
+                      cachedDataType="i4"
+                      cachedName="product_id"
+                      externalMetadataColumnId="Package\ETL DimProduct\Load DimProduct.Inputs[OLE DB Destination Input].ExternalColumns[product_id]"
+                      lineageId="Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_id]" />
+                    <inputColumn
+                      refId="Package\ETL DimProduct\Load DimProduct.Inputs[OLE DB Destination Input].Columns[product_name]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="product_name"
+                      externalMetadataColumnId="Package\ETL DimProduct\Load DimProduct.Inputs[OLE DB Destination Input].ExternalColumns[product_name]"
+                      lineageId="Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_name]" />
+                    <inputColumn
+                      refId="Package\ETL DimProduct\Load DimProduct.Inputs[OLE DB Destination Input].Columns[SubcategoryNameNew]"
+                      cachedDataType="wstr"
+                      cachedLength="102"
+                      cachedName="SubcategoryNameNew"
+                      externalMetadataColumnId="Package\ETL DimProduct\Load DimProduct.Inputs[OLE DB Destination Input].ExternalColumns[product_subcategory]"
+                      lineageId="Package\ETL DimProduct\Replace NULL.Outputs[Derived Column Output].Columns[SubcategoryNameNew]" />
+                    <inputColumn
+                      refId="Package\ETL DimProduct\Load DimProduct.Inputs[OLE DB Destination Input].Columns[CategoryNameNew]"
+                      cachedDataType="wstr"
+                      cachedLength="102"
+                      cachedName="CategoryNameNew"
+                      externalMetadataColumnId="Package\ETL DimProduct\Load DimProduct.Inputs[OLE DB Destination Input].ExternalColumns[product_category]"
+                      lineageId="Package\ETL DimProduct\Replace NULL.Outputs[Derived Column Output].Columns[CategoryNameNew]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\ETL DimProduct\Load DimProduct.Inputs[OLE DB Destination Input].ExternalColumns[product_sid]"
+                      dataType="i4"
+                      name="product_sid" />
+                    <externalMetadataColumn
+                      refId="Package\ETL DimProduct\Load DimProduct.Inputs[OLE DB Destination Input].ExternalColumns[product_id]"
+                      dataType="i4"
+                      name="product_id" />
+                    <externalMetadataColumn
+                      refId="Package\ETL DimProduct\Load DimProduct.Inputs[OLE DB Destination Input].ExternalColumns[product_name]"
+                      dataType="wstr"
+                      length="50"
+                      name="product_name" />
+                    <externalMetadataColumn
+                      refId="Package\ETL DimProduct\Load DimProduct.Inputs[OLE DB Destination Input].ExternalColumns[product_subcategory]"
+                      dataType="wstr"
+                      length="50"
+                      name="product_subcategory" />
+                    <externalMetadataColumn
+                      refId="Package\ETL DimProduct\Load DimProduct.Inputs[OLE DB Destination Input].ExternalColumns[product_category]"
+                      dataType="wstr"
+                      length="50"
+                      name="product_category" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\ETL DimProduct\Load DimProduct.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\ETL DimProduct\Load DimProduct.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Load DimProduct.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\ETL DimProduct\Load DimProduct.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Load DimProduct.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\ETL DimProduct\Load DimProduct.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\ETL DimProduct\Lookup ProductCategory"
+              componentClassID="Microsoft.Lookup"
+              contactInfo="Lookup;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;6"
+              description="Joins additional columns to the data flow by looking up values in a table. For example, join to the 'employee id' column the employees table to get 'hire date' and 'employee name'. We recommend this transformation when the lookup table can fit into memory."
+              name="Lookup ProductCategory"
+              usesDispositions="true"
+              version="6">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Specifies the SQL statement that generates the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">select * from [dbo].[ProductCategory]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies a SQL statement that uses parameters to generate the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommandParam"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">select * from (select * from [dbo].[ProductCategory]) [refTable]
+where [refTable].[category_id] = ?</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the type of connection used to access the reference dataset."
+                  name="ConnectionType"
+                  typeConverter="LookupConnectionType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the cache type of the lookup table."
+                  name="CacheType"
+                  typeConverter="CacheType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies how the Lookup transformation handles rows without matching entries in the reference data set."
+                  name="NoMatchBehavior"
+                  typeConverter="LookupNoMatchBehavior">1</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the percentage of the cache that is allocated for rows with no matching entries in the reference dataset."
+                  name="NoMatchCachePercentage">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Maximum Memory Usage for Reference Cache on a 32 bit platform."
+                  name="MaxMemoryUsage">25</property>
+                <property
+                  dataType="System.Int64"
+                  description="Maximum Memory Usage for Reference Cache on a 64 bit platform."
+                  name="MaxMemoryUsage64">25</property>
+                <property
+                  dataType="System.String"
+                  description="Indicates whether to reference metadata in an XML format."
+                  name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="product_category" dataType="DT_WSTR" length="50" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="category_id" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property
+                  containsID="true"
+                  dataType="System.String"
+                  description="Specifies the list of lineage identifiers that map to the parameters that the SQL statement in the SQLCommand property uses. Entries in the list are separated by semicolons."
+                  name="ParameterMap">#{Package\ETL DimProduct\Lookup ProductSubcategory.Outputs[Lookup Match Output].Columns[category_id]};</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Determines whether duplicate keys in the reference data should be treated as errors when full cache mode is used."
+                  name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\ETL DimProduct\Lookup ProductCategory.Connections[OleDbConnection]"
+                  connectionManagerID="{87DD0B90-800A-452B-8138-367FEC8683E1}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[DESKTOP-QIJ04VM_SQLEXPRESS.DBKnjizara]"
+                  description="Connection manager used to access lookup data."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\ETL DimProduct\Lookup ProductCategory.Inputs[Lookup Input]"
+                  name="Lookup Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\ETL DimProduct\Lookup ProductCategory.Inputs[Lookup Input].Columns[category_id]"
+                      cachedDataType="i4"
+                      cachedName="category_id"
+                      lineageId="Package\ETL DimProduct\Lookup ProductSubcategory.Outputs[Lookup Match Output].Columns[category_id]">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table that a column joins."
+                          name="JoinToReferenceColumn">category_id</property>
+                        <property
+                          dataType="System.Null"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\ETL DimProduct\Lookup ProductCategory.Outputs[Lookup Match Output]"
+                  errorOrTruncationOperation="Lookup"
+                  exclusionGroup="1"
+                  name="Lookup Match Output"
+                  synchronousInputId="Package\ETL DimProduct\Lookup ProductCategory.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Lookup ProductCategory.Outputs[Lookup Match Output].Columns[product_category]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Copy Column"
+                      length="50"
+                      lineageId="Package\ETL DimProduct\Lookup ProductCategory.Outputs[Lookup Match Output].Columns[product_category]"
+                      name="product_category"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn">product_category</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ETL DimProduct\Lookup ProductCategory.Outputs[Lookup No Match Output]"
+                  description="The Lookup output that handles rows with no matching entries in the reference dataset. Use this output when the NoMatchBehavior property is set to &quot;Send rows with no matching entries to the no match output.&quot;"
+                  exclusionGroup="1"
+                  name="Lookup No Match Output"
+                  synchronousInputId="Package\ETL DimProduct\Lookup ProductCategory.Inputs[Lookup Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ETL DimProduct\Lookup ProductCategory.Outputs[Lookup Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Lookup Error Output"
+                  synchronousInputId="Package\ETL DimProduct\Lookup ProductCategory.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Lookup ProductCategory.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\ETL DimProduct\Lookup ProductCategory.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Lookup ProductCategory.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\ETL DimProduct\Lookup ProductCategory.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\ETL DimProduct\Lookup ProductSubcategory"
+              componentClassID="Microsoft.Lookup"
+              contactInfo="Lookup;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;6"
+              description="Joins additional columns to the data flow by looking up values in a table. For example, join to the 'employee id' column the employees table to get 'hire date' and 'employee name'. We recommend this transformation when the lookup table can fit into memory."
+              name="Lookup ProductSubcategory"
+              usesDispositions="true"
+              version="6">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Specifies the SQL statement that generates the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">select * from [dbo].[ProductSubcategory]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies a SQL statement that uses parameters to generate the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommandParam"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">select * from (select * from [dbo].[ProductSubcategory]) [refTable]
+where [refTable].[subcategory_id] = ?</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the type of connection used to access the reference dataset."
+                  name="ConnectionType"
+                  typeConverter="LookupConnectionType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the cache type of the lookup table."
+                  name="CacheType"
+                  typeConverter="CacheType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies how the Lookup transformation handles rows without matching entries in the reference data set."
+                  name="NoMatchBehavior"
+                  typeConverter="LookupNoMatchBehavior">1</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the percentage of the cache that is allocated for rows with no matching entries in the reference dataset."
+                  name="NoMatchCachePercentage">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Maximum Memory Usage for Reference Cache on a 32 bit platform."
+                  name="MaxMemoryUsage">25</property>
+                <property
+                  dataType="System.Int64"
+                  description="Maximum Memory Usage for Reference Cache on a 64 bit platform."
+                  name="MaxMemoryUsage64">25</property>
+                <property
+                  dataType="System.String"
+                  description="Indicates whether to reference metadata in an XML format."
+                  name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="product_subcategory" dataType="DT_WSTR" length="50" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="product_category" dataType="DT_WSTR" length="50" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="category_id" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="subcategory_id" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property
+                  containsID="true"
+                  dataType="System.String"
+                  description="Specifies the list of lineage identifiers that map to the parameters that the SQL statement in the SQLCommand property uses. Entries in the list are separated by semicolons."
+                  name="ParameterMap">#{Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].Columns[subcategory_id]};</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Determines whether duplicate keys in the reference data should be treated as errors when full cache mode is used."
+                  name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\ETL DimProduct\Lookup ProductSubcategory.Connections[OleDbConnection]"
+                  connectionManagerID="{87DD0B90-800A-452B-8138-367FEC8683E1}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[DESKTOP-QIJ04VM_SQLEXPRESS.DBKnjizara]"
+                  description="Connection manager used to access lookup data."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\ETL DimProduct\Lookup ProductSubcategory.Inputs[Lookup Input]"
+                  name="Lookup Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\ETL DimProduct\Lookup ProductSubcategory.Inputs[Lookup Input].Columns[subcategory_id]"
+                      cachedDataType="i4"
+                      cachedName="subcategory_id"
+                      lineageId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].Columns[subcategory_id]">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table that a column joins."
+                          name="JoinToReferenceColumn">subcategory_id</property>
+                        <property
+                          dataType="System.Null"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\ETL DimProduct\Lookup ProductSubcategory.Outputs[Lookup Match Output]"
+                  errorOrTruncationOperation="Lookup"
+                  exclusionGroup="1"
+                  name="Lookup Match Output"
+                  synchronousInputId="Package\ETL DimProduct\Lookup ProductSubcategory.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Lookup ProductSubcategory.Outputs[Lookup Match Output].Columns[product_subcategory]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Copy Column"
+                      length="50"
+                      lineageId="Package\ETL DimProduct\Lookup ProductSubcategory.Outputs[Lookup Match Output].Columns[product_subcategory]"
+                      name="product_subcategory"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn">product_subcategory</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Lookup ProductSubcategory.Outputs[Lookup Match Output].Columns[category_id]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Copy Column"
+                      lineageId="Package\ETL DimProduct\Lookup ProductSubcategory.Outputs[Lookup Match Output].Columns[category_id]"
+                      name="category_id"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn">category_id</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ETL DimProduct\Lookup ProductSubcategory.Outputs[Lookup No Match Output]"
+                  description="The Lookup output that handles rows with no matching entries in the reference dataset. Use this output when the NoMatchBehavior property is set to &quot;Send rows with no matching entries to the no match output.&quot;"
+                  exclusionGroup="1"
+                  name="Lookup No Match Output"
+                  synchronousInputId="Package\ETL DimProduct\Lookup ProductSubcategory.Inputs[Lookup Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ETL DimProduct\Lookup ProductSubcategory.Outputs[Lookup Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Lookup Error Output"
+                  synchronousInputId="Package\ETL DimProduct\Lookup ProductSubcategory.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Lookup ProductSubcategory.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\ETL DimProduct\Lookup ProductSubcategory.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Lookup ProductSubcategory.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\ETL DimProduct\Lookup ProductSubcategory.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\ETL DimProduct\Read table Product"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="Read table Product"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[Product]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\ETL DimProduct\Read table Product.Connections[OleDbConnection]"
+                  connectionManagerID="{87DD0B90-800A-452B-8138-367FEC8683E1}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[DESKTOP-QIJ04VM_SQLEXPRESS.DBKnjizara]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].Columns[product_id]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].ExternalColumns[product_id]"
+                      lineageId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].Columns[product_id]"
+                      name="product_id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].Columns[product_name]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].ExternalColumns[product_name]"
+                      length="50"
+                      lineageId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].Columns[product_name]"
+                      name="product_name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].Columns[subcategory_id]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].ExternalColumns[subcategory_id]"
+                      lineageId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].Columns[subcategory_id]"
+                      name="subcategory_id"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].ExternalColumns[product_id]"
+                      dataType="i4"
+                      name="product_id" />
+                    <externalMetadataColumn
+                      refId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].ExternalColumns[product_name]"
+                      dataType="wstr"
+                      length="50"
+                      name="product_name" />
+                    <externalMetadataColumn
+                      refId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].ExternalColumns[category_id]"
+                      dataType="i4"
+                      name="category_id" />
+                    <externalMetadataColumn
+                      refId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].ExternalColumns[subcategory_id]"
+                      dataType="i4"
+                      name="subcategory_id" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Error Output].Columns[product_id]"
+                      dataType="i4"
+                      lineageId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Error Output].Columns[product_id]"
+                      name="product_id" />
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Error Output].Columns[product_name]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Error Output].Columns[product_name]"
+                      name="product_name" />
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Error Output].Columns[subcategory_id]"
+                      dataType="i4"
+                      lineageId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Error Output].Columns[subcategory_id]"
+                      name="subcategory_id" />
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\ETL DimProduct\Replace NULL"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="Replace NULL"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\ETL DimProduct\Replace NULL.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\ETL DimProduct\Replace NULL.Inputs[Derived Column Input].Columns[product_subcategory]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="product_subcategory"
+                      lineageId="Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_subcategory]" />
+                    <inputColumn
+                      refId="Package\ETL DimProduct\Replace NULL.Inputs[Derived Column Input].Columns[product_category]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="product_category"
+                      lineageId="Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_category]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\ETL DimProduct\Replace NULL.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\ETL DimProduct\Replace NULL.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Replace NULL.Outputs[Derived Column Output].Columns[SubcategoryNameNew]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      length="102"
+                      lineageId="Package\ETL DimProduct\Replace NULL.Outputs[Derived Column Output].Columns[SubcategoryNameNew]"
+                      name="SubcategoryNameNew"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">[REPLACENULL](#{Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_subcategory]},"Nema podkategoriju")</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">REPLACENULL(product_subcategory,"Nema podkategoriju")</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Replace NULL.Outputs[Derived Column Output].Columns[CategoryNameNew]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      length="102"
+                      lineageId="Package\ETL DimProduct\Replace NULL.Outputs[Derived Column Output].Columns[CategoryNameNew]"
+                      name="CategoryNameNew"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">[REPLACENULL](#{Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_category]},"Nema kategoriju")</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">REPLACENULL(product_category,"Nema kategoriju")</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ETL DimProduct\Replace NULL.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\ETL DimProduct\Replace NULL.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Replace NULL.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\ETL DimProduct\Replace NULL.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Replace NULL.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\ETL DimProduct\Replace NULL.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\ETL DimProduct\Union All"
+              componentClassID="Microsoft.UnionAll"
+              contactInfo="Union All;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+              description="Combines rows from multiple data flows without sorting. For example, add rows back to a data flow after correction of errors. If sorting is important, we recommend using the Merge transformation."
+              name="Union All"
+              version="1">
+              <inputs>
+                <input
+                  refId="Package\ETL DimProduct\Union All.Inputs[Union All Input 1]"
+                  name="Union All Input 1">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\ETL DimProduct\Union All.Inputs[Union All Input 1].Columns[product_id]"
+                      cachedDataType="i4"
+                      cachedName="product_id"
+                      lineageId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].Columns[product_id]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_id]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\ETL DimProduct\Union All.Inputs[Union All Input 1].Columns[product_name]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="product_name"
+                      lineageId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].Columns[product_name]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_name]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\ETL DimProduct\Union All.Inputs[Union All Input 1].Columns[subcategory_id]"
+                      cachedDataType="i4"
+                      cachedName="subcategory_id"
+                      lineageId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].Columns[subcategory_id]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[subcategory_id]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\ETL DimProduct\Union All.Inputs[Union All Input 1].Columns[product_subcategory]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="product_subcategory"
+                      lineageId="Package\ETL DimProduct\Lookup ProductSubcategory.Outputs[Lookup Match Output].Columns[product_subcategory]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_subcategory]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\ETL DimProduct\Union All.Inputs[Union All Input 1].Columns[category_id]"
+                      cachedDataType="i4"
+                      cachedName="category_id"
+                      lineageId="Package\ETL DimProduct\Lookup ProductSubcategory.Outputs[Lookup Match Output].Columns[category_id]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[category_id]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\ETL DimProduct\Union All.Inputs[Union All Input 1].Columns[product_category]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="product_category"
+                      lineageId="Package\ETL DimProduct\Lookup ProductCategory.Outputs[Lookup Match Output].Columns[product_category]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_category]}</property>
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+                <input
+                  refId="Package\ETL DimProduct\Union All.Inputs[Union All Input 2]"
+                  hasSideEffects="true"
+                  name="Union All Input 2">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\ETL DimProduct\Union All.Inputs[Union All Input 2].Columns[product_id]"
+                      cachedDataType="i4"
+                      cachedName="product_id"
+                      lineageId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].Columns[product_id]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_id]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\ETL DimProduct\Union All.Inputs[Union All Input 2].Columns[product_name]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="product_name"
+                      lineageId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].Columns[product_name]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_name]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\ETL DimProduct\Union All.Inputs[Union All Input 2].Columns[subcategory_id]"
+                      cachedDataType="i4"
+                      cachedName="subcategory_id"
+                      lineageId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output].Columns[subcategory_id]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[subcategory_id]}</property>
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+                <input
+                  refId="Package\ETL DimProduct\Union All.Inputs[Union All Input 3]"
+                  dangling="true"
+                  hasSideEffects="true"
+                  name="Union All Input 3">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\ETL DimProduct\Union All.Outputs[Union All Output 1]"
+                  name="Union All Output 1">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_id]"
+                      dataType="i4"
+                      lineageId="Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_id]"
+                      name="product_id" />
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_name]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_name]"
+                      name="product_name" />
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[subcategory_id]"
+                      dataType="i4"
+                      lineageId="Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[subcategory_id]"
+                      name="subcategory_id" />
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_subcategory]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_subcategory]"
+                      name="product_subcategory" />
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[category_id]"
+                      dataType="i4"
+                      lineageId="Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[category_id]"
+                      name="category_id" />
+                    <outputColumn
+                      refId="Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_category]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\ETL DimProduct\Union All.Outputs[Union All Output 1].Columns[product_category]"
+                      name="product_category" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\ETL DimProduct.Paths[Derived Column Output]"
+              endId="Package\ETL DimProduct\Load DimProduct.Inputs[OLE DB Destination Input]"
+              name="Derived Column Output"
+              startId="Package\ETL DimProduct\Replace NULL.Outputs[Derived Column Output]" />
+            <path
+              refId="Package\ETL DimProduct.Paths[Lookup Match Output]"
+              endId="Package\ETL DimProduct\Lookup ProductCategory.Inputs[Lookup Input]"
+              name="Lookup Match Output"
+              startId="Package\ETL DimProduct\Lookup ProductSubcategory.Outputs[Lookup Match Output]" />
+            <path
+              refId="Package\ETL DimProduct.Paths[Lookup Match Output1]"
+              endId="Package\ETL DimProduct\Union All.Inputs[Union All Input 1]"
+              name="Lookup Match Output"
+              startId="Package\ETL DimProduct\Lookup ProductCategory.Outputs[Lookup Match Output]" />
+            <path
+              refId="Package\ETL DimProduct.Paths[Lookup No Match Output]"
+              endId="Package\ETL DimProduct\Union All.Inputs[Union All Input 2]"
+              name="Lookup No Match Output"
+              startId="Package\ETL DimProduct\Lookup ProductSubcategory.Outputs[Lookup No Match Output]" />
+            <path
+              refId="Package\ETL DimProduct.Paths[OLE DB Source Output]"
+              endId="Package\ETL DimProduct\Lookup ProductSubcategory.Inputs[Lookup Input]"
+              name="OLE DB Source Output"
+              startId="Package\ETL DimProduct\Read table Product.Outputs[OLE DB Source Output]" />
+            <path
+              refId="Package\ETL DimProduct.Paths[Union All Output 1]"
+              endId="Package\ETL DimProduct\Replace NULL.Inputs[Derived Column Input]"
+              name="Union All Output 1"
+              startId="Package\ETL DimProduct\Union All.Outputs[Union All Output 1]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{7EFE1A7D-9E92-48DE-8A1E-5CCD4FBC1B4B}"
+      DTS:From="Package\DROP and CREATE DimProduct"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\ETL DimProduct" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="230.4,41.6"
+          Id="Package\DROP and CREATE DimProduct"
+          TopLeft="39.1666645266944,121.333332489596" />
+        <NodeLayout
+          Size="154.4,41.6"
+          Id="Package\ETL DimProduct"
+          TopLeft="78.3333290533889,280.799998047352" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="154.949996790042,162.933332489596">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,117.866665557755"
+              Start="0,0"
+              End="0,110.366665557755">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,110.366665557755" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <AnnotationLayout
+          Text="Paket za popunjavanje tabele DimProduct"
+          ParentId="Package"
+          FontInfo="{assembly:Null}"
+          Size="249.6,40"
+          Id="d5f30af5-5eb5-412c-953e-862ab487671f"
+          TopLeft="19.1666656194462,38.1333330681589" />
+        <AnnotationLayout
+          Text="Data Flow Task za presipanje podataka iz izvora u skladiste"
+          ParentId="Package"
+          FontInfo="{assembly:Null}"
+          Size="337.6,40"
+          Id="f6cb4c84-73ef-4505-b564-840593c59035"
+          TopLeft="236.633320447969,272.133331440952" />
+        <AnnotationLayout
+          Text="Izvrsava SQL upite"
+          ParentId="Package"
+          FontInfo="{assembly:Null}"
+          Size="124.8,40"
+          Id="28f910ed-8343-400e-a04f-38f17cf1093a"
+          TopLeft="331.6666485452,118.733332507677" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\ETL DimProduct">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="167.2,41.6"
+          Id="Package\ETL DimProduct\Read table Product"
+          TopLeft="59.1666634339427,58.0666662628783" />
+        <NodeLayout
+          Size="193.6,41.6"
+          Id="Package\ETL DimProduct\Lookup ProductCategory"
+          TopLeft="44.1666642535064,253.933331567513" />
+        <NodeLayout
+          Size="209.6,41.6"
+          Id="Package\ETL DimProduct\Lookup ProductSubcategory"
+          TopLeft="39.9999978144965,155.133332254556" />
+        <NodeLayout
+          Size="145.6,41.6"
+          Id="Package\ETL DimProduct\Replace NULL"
+          TopLeft="374.766650867297,381.333330681589" />
+        <NodeLayout
+          Size="158.4,41.6"
+          Id="Package\ETL DimProduct\Load DimProduct"
+          TopLeft="365.433319355217,487.066663568947" />
+        <NodeLayout
+          Size="120,41.6"
+          Id="Package\ETL DimProduct\Union All"
+          TopLeft="373.3333129353,279.933331386712" />
+        <EdgeLayout
+          Id="Package\ETL DimProduct.Paths[OLE DB Source Output]"
+          TopLeft="143.78333062422,99.6666662628784">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,55.4666659916772"
+              Start="0,0"
+              End="0,47.9666659916772">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,47.9666659916772" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\ETL DimProduct.Paths[Lookup No Match Output]"
+          TopLeft="178.399997814496,196.733332254556">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="254.933315120804,83.1999991321564"
+              Start="0,0"
+              End="254.933315120804,75.6999991321564">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,29.6581814670996" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,29.6581814670996"
+                    Point2="0,33.6581814670996"
+                    Point3="4,33.6581814670996" />
+                  <mssgle:LineSegment
+                    End="250.933315120804,33.6581814670996" />
+                  <mssgle:CubicBezierSegment
+                    Point1="250.933315120804,33.6581814670996"
+                    Point2="254.933315120804,33.6581814670996"
+                    Point3="254.933315120804,37.6581814670996" />
+                  <mssgle:LineSegment
+                    End="254.933315120804,75.6999991321564" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="71.6602708416519,38.6581814670996,111.6127734375,11.609375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\ETL DimProduct.Paths[Lookup Match Output1]"
+          TopLeft="237.766664253506,274.733331567513">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="135.566648681794,25.9999998191992"
+              Start="0,0"
+              End="128.066648681794,25.9999998191992">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="63.7833243408969,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="63.7833243408969,0"
+                    Point2="67.7833243408969,0"
+                    Point3="67.7833243408969,4" />
+                  <mssgle:LineSegment
+                    End="67.7833243408969,21.9999998191992" />
+                  <mssgle:CubicBezierSegment
+                    Point1="67.7833243408969,21.9999998191992"
+                    Point2="67.7833243408969,25.9999998191992"
+                    Point3="71.7833243408969,25.9999998191992" />
+                  <mssgle:LineSegment
+                    End="128.066648681794,25.9999998191992" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="19.5919376221469,-17.609375,96.3827734375,11.609375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\ETL DimProduct.Paths[Lookup Match Output]"
+          TopLeft="142.883331034001,196.733332254556">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,57.1999993129571"
+              Start="0,0"
+              End="0,49.6999993129571">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,49.6999993129571" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-48.19138671875,19.0453121564786,96.3827734375,11.609375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\ETL DimProduct.Paths[Derived Column Output]"
+          TopLeft="446.099985111257,422.933330681589">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,64.1333328873583"
+              Start="0,0"
+              End="0,56.6333328873583">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,56.6333328873583" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\ETL DimProduct.Paths[Union All Output 1]"
+          TopLeft="433.3333129353,321.533331386712">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="14.2333379319971,59.7999992948769"
+              Start="0,0"
+              End="14.2333379319971,52.2999992948769">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,25.8999996474384" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,25.8999996474384"
+                    Point2="0,29.8999996474384"
+                    Point3="4,29.8999996474384" />
+                  <mssgle:LineSegment
+                    End="10.2333379319971,29.8999996474384" />
+                  <mssgle:CubicBezierSegment
+                    Point1="10.2333379319971,29.8999996474384"
+                    Point2="14.2333379319971,29.8999996474384"
+                    Point3="14.2333379319971,33.8999996474384" />
+                  <mssgle:LineSegment
+                    End="14.2333379319971,52.2999992948769" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <AnnotationLayout
+          Text="OLE DB Source ucitava podatke iz SQL Servera - konkretno jednu tabelu"
+          ParentId="Package\ETL DimProduct"
+          FontInfo="{assembly:Null}"
+          Size="408.8,NaN"
+          Id="657e04bd-652d-4796-83ac-97e2da4f4054"
+          TopLeft="272.499985111257,51.1333329777585" />
+        <AnnotationLayout
+          Text="Lookup operator sprovodi join"
+          ParentId="Package\ETL DimProduct"
+          FontInfo="{assembly:Null}"
+          Size="189.6,NaN"
+          Id="87992b02-61ed-4c78-85c2-6c88d3703752"
+          TopLeft="272.499985111257,148.199998969436" />
+        <AnnotationLayout
+          Text="Union All spaja sve tokove podataka u jedan tok podataka"
+          ParentId="Package\ETL DimProduct"
+          FontInfo="{assembly:Null}"
+          Size="336,NaN"
+          Id="199e764f-8e6e-4557-bc9e-8e9bf9c2d075"
+          TopLeft="569.999984155099,278.533331440952" />
+        <AnnotationLayout
+          Text="OLE DB Destination upisuje podatke na odrediste"
+          ParentId="Package\ETL DimProduct"
+          FontInfo="{assembly:Null}"
+          Size="289.6,NaN"
+          Id="9c2a8f19-e75b-45ab-9d8b-97571a4b75fb"
+          TopLeft="534.333327960637,489.39999755919" />
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\ETL DimProduct\Read table Product">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\ETL DimProduct\Lookup ProductCategory">
+    <Properties>
+      <Property>
+        <Name>OverwriteParamsSQLProp</Name>
+        <Value
+          type="q2:string">false</Value>
+      </Property>
+      <Property>
+        <Name>UsedTableName</Name>
+        <Value
+          type="q3:string">[dbo].[ProductCategory]</Value>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q4:string">0</Value>
+      </Property>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\ETL DimProduct\Lookup ProductSubcategory">
+    <Properties>
+      <Property>
+        <Name>OverwriteParamsSQLProp</Name>
+        <Value
+          type="q2:string">false</Value>
+      </Property>
+      <Property>
+        <Name>UsedTableName</Name>
+        <Value
+          type="q3:string">[dbo].[ProductSubcategory]</Value>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q4:string">0</Value>
+      </Property>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\ETL DimProduct\Load DimProduct">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
